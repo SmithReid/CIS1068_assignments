@@ -18,17 +18,9 @@ public class Southie {
     public static final String INFILE = "textfiles/jaws.txt";
     public static final String OUTFILE = "textfiles/jaws_out.txt";
 
-    public static Scanner getScanner() throws FileNotFoundException {
-        return new Scanner(new File(INFILE));
-    }
-
-    public static String processWord(String word) {
-        return "word";
-    }
-
-    public static String processLine(String original_line) {
+    public static String processLine(String originalLine) {
         String output = "";
-        String line = "   " + original_line;
+        String line = "   " + originalLine;
         char predecessor, prepredecessor, preprepredecessor, successor;
         // the notation is messy, but I think it's clear. preprepredecessor will be used once
 
@@ -64,10 +56,10 @@ public class Southie {
                     } else if (predecessor == 'o' && prepredecessor == 'o') {
                         output += "wah";
                     } else if (predecessor == 'a' ||
-                                        predecessor == 'e' ||
-                                        predecessor == 'i' ||
-                                        predecessor == 'o' ||
-                                        predecessor == 'u') {
+                                predecessor == 'e' ||
+                                predecessor == 'i' ||
+                                predecessor == 'o' ||
+                                predecessor == 'u') {
                         output += "h";
                     } 
                 } else if (ch == 'a' && (successor == ' ' || successor == '\n')) {
@@ -91,7 +83,7 @@ public class Southie {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        Scanner reader = getScanner();
+        Scanner reader = new Scanner(new File(INFILE));
         process(reader);
     }
 }
