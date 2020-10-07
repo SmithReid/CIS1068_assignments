@@ -61,7 +61,9 @@ public class Southie {
                                 predecessor == 'o' ||
                                 predecessor == 'u') {
                         output += "h";
-                    } 
+                    } else {
+                        output += "r";
+                    }
                 } else if (ch == 'a' && (successor == ' ' || successor == '\n')) {
                     output += "ar";
                 } else {
