@@ -285,6 +285,7 @@ public class ArrayPractice {
             output[outputIndex] = B[i];
             outputIndex++;
         }
+        return output; 
     }
 
     /*
