@@ -26,7 +26,7 @@ public class Southie {
 
         for (int i = 0; i < line.length(); i++) {
             char ch = line.charAt(i);
-            if (!(ch >= 41 && ch <= 90) && !(ch >= 97 && ch <= 122)) {
+            if (!(ch >= 97 && ch <= 122)) { // ch is alredy lowercase
                 // Then ch is NOT a letter. 
                 output += ch;
             } else {
