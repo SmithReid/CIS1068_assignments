@@ -300,7 +300,7 @@ public class ArrayPractice {
      * method, A[] would be {50,40,30,20,10}
      */
     public static void reverse(int A[]) {
-        int otherSide = A.length;
+        int otherSide = A.length - 1;
         int temp;
         for (int i = 0; i < A.length / 2; i++) {
             temp = A[i];
