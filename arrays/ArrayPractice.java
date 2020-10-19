@@ -224,10 +224,10 @@ public class ArrayPractice {
     /* | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 100 | 0 | */
     /* +----+----+----+----+----+----+----+----+-----|----| */
     public static void shiftLeft(int[] A) {
-        for (int i = 0; i < A.length - 2; i++) {
+        for (int i = 0; i < A.length - 1; i++) {
             A[i] = A[i + 1];
         }
-        A[A.length - 2] = A[A.length - 1];
+        A[A.length - 1] = 0;
     }
 
 
