@@ -135,8 +135,12 @@ public class ArrayPractice {
             return null;
         }
         int[] output = new int[n];
-        for (int i = 0; i < n; i++) {
-            output[i] = A[i];
+        for (int i = 0; i < output.length; i++) {
+            try {
+                output[i] = A[i];
+            } catch (ArrayIndexOutOfBoundsException e) {
+                output[i] = 0;
+            }
         }
         return output;
     }
@@ -151,6 +155,9 @@ public class ArrayPractice {
             if (A[i] % 2 == 1) {
                 nOdds++;
             }
+        }
+        if (nOdds == 0) {
+            return null;
         }
         int[] output = new int[nOdds];
         int location = 0;
@@ -184,11 +191,11 @@ public class ArrayPractice {
 
     /* and the function returns 30 */
     public static int remove(int[] A, int x) {
-        if (x <= 0 || x > A.length){
+        if (x < 0 || x >= A.length){
             return -1;
         }
         int output = -1;
-        for (int i = 0; i < A.length; i++) {
+        for (int i = 0; i <= A.length - 2; i++) {
             if (i < x) {
                 ; // do nothing
             } else if (i == x) {
@@ -197,7 +204,7 @@ public class ArrayPractice {
                 A[i - 1] = A[i];
             }
         }
-        A[A.length - 1] = 0;
+        A[A.length - 2] = 0;
         return output;
     }
 
