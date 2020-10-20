@@ -19,7 +19,6 @@ similarity. This would be an easy switch to make.
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.PrintStream;
 
 public class Recommender {
     public static final String BOOKSFILE = "textfiles/books.txt";
