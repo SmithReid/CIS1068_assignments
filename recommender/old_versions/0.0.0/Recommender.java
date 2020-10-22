@@ -156,21 +156,24 @@ public class Recommender {
         return output;
     }
 
-    public static double[] getRecommendations(int[] userRatings, double similarityMatrix) {
-        ;
+    public static double[] getRecommendations(int[] userRatings, double[][] similarityMatrix) {
+        // TODO
+        double[] output = new double[similarityMatrix.length];
+        return output;
     }
 
     public static void printOrderedRecommendations(double[] recommendations, 
                                                     String[] books) {
         // per the assumption at the top of the program, the inputs will be the same length
-        ;
+        // TODO
+        System.out.println("// TODO");
     }
 
-    public static void printRecommendations(double[] userRatings, 
+    public static void printRecommendations(int[] userRatings, 
                                             double[][] similarityMatrix, 
                                             String[] books) {
         double[] recommendations = getRecommendations(userRatings, similarityMatrix);
-        printOrderedRecommendations(orderedRecommendations, books);
+        printOrderedRecommendations(recommendations, books);
     }
 
     public static void main(String[] args) throws FileNotFoundException {
