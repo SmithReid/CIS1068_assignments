@@ -8,64 +8,40 @@ import java.io.FileNotFoundException;
 import java.lang.Math;
 
 public class Recommender {
+    /*******************CONSTANTS**********************/
+
     public static final String BOOKSFILE = "textfiles/books.txt";
     public static final String RATINGSFILE = "textfiles/ratings.txt";
 
-    public static void print1DInt(int[] arr) {
-        // obvious debugging function is obvious
-        for (int i = 0; i < arr.length; i++) {
-            System.out.print(arr[i] + " ");
-        }
-        System.out.println();
-    }
+    public static final int NUM_RECOMMENDATIONS = 0;
+        // if this is 0, we will be recommending each book the user has not read in order 
+        // from most recommended to least recommended, but for extra credit, this can 
+        // be made non-zero
+        // under this implementation, NUM_RECOMMENDATIONS must be <= unread books
+        // or the script throws index out of bounds. 
 
-    public static void print1DDouble(double[] arr) {
-        // obvious debugging function is obvious
-        // obvious copy of above function is obvious
-        // (python masterrace)
-        for (int i = 0; i < arr.length; i++) {
-            System.out.print(arr[i] + " ");
-        }
-        System.out.println();
-    }
+    /****************HELPER FUNCTIONS******************/
+    // (these functions do not appear in main, but 
+        // a great deal of the magic does happen here)
 
-    public static String[] read1DString(String filename) throws FileNotFoundException {
-        // reasonably boilerplate, with help from stackoverflow
-        Scanner sc = new Scanner(new File(filename));
-        int nRows = 0;
-        while (sc.hasNextLine()) {
-            String trash = sc.nextLine();
-            nRows++;
+    public static int[] constructColumn(int[][] arr, int colNum) {
+        int[] output = new int[arr.length];
+        for (int j = 0; j < output.length; j++) {
+            output[j] = arr[j][colNum];
         }
-        String[] output = new String[nRows];
-        sc.close();
-        Scanner sc2 = new Scanner(new File(filename));
-        for (int i = 0; i < nRows; i++) {
-            output[i] = sc2.nextLine();
-        }
-        sc2.close();
         return output;
     }
 
-    public static int[][] read2DInt(String filename) throws FileNotFoundException {
-        // reasonably boilerplate, with help from stackoverflow
-        Scanner sc = new Scanner(new File(filename));
-        int rowsCount = 1;
-        String[] firstLine = sc.nextLine().trim().split(" ");
-        while (sc.hasNextLine()) {
-            String trash = sc.nextLine();
-            rowsCount++;
-        }
-        sc.close();
-        Scanner sc2 = new Scanner(new File(filename));
-        int[][] output = new int[rowsCount][firstLine.length];
-        for (int i = 0; i < output.length; i++) {
-            String[] line = sc2.nextLine().trim().split(" ");
-            for (int j = 0; j < line.length; j++) {
-                output[i][j] = Integer.parseInt(line[j]);
+    public static int getDoubleMaxIndex(double[] arr) {
+        double maxValue = arr[0];
+        // see function name for output description
+        int output = 0;
+        for (int i = 1; i < arr.length; i++) {
+            if (arr[i] > maxValue) {
+                maxValue = arr[i];
+                output = i;
             }
         }
-        sc2.close();
         return output;
     }
 
@@ -108,36 +84,80 @@ public class Recommender {
             );
     }
 
-    public static int[] getUserRatings(String[] books) {
-        int[] output = new int[books.length];
-        Scanner s = new Scanner(System.in);
-        for (int i = 0; i < books.length; i++) {
-            System.out.println("What do you think of " + books[i] + "?");
-            output[i] = s.nextInt();
+    public static double userGonnaLikeItScore(int[] userRatings, double[] bookScores) {
+        double output = 0.0;
+        int countInfo = 0;
+        for (int i = 0; i < bookScores.length; i++) {
+            if (bookScores[i] != 1.0) {
+                output += userRatings[i] * bookScores[i];
+                countInfo++;
+            }
+        }
+        return output / countInfo;
+    }
+
+    public static double[] copyDoubleArray(double[] arr) {
+        double[] output = new double[arr.length];
+        for (int i = 0; i < output.length; i++) {
+            output[i] = arr[i];
         }
         return output;
     }
 
-    public static double[] getUserUserSimilarity(int[] userRatings, int[][] ratings) {
-        double[] output = new double[ratings.length];
-        for (int i = 0; i < ratings.length; i++) {
-            output[i] = computeSimilarity(userRatings, ratings[i]);
+    public static double[] dropFromDoubleArray(double[] arr, int drop) {
+        double[] output = new double[arr.length - 1];
+        for (int i = 0; i < arr.length; i++) {
+            if (i < drop) {
+                output[i] = arr[i];
+            } else if (i == drop) {
+                ;
+            } else {
+                output[i - 1] = arr[i];
+            }
         }
         return output;
     }
 
-    public static void printRecommendations(int[] recommendationOrder, String[] books) {
-        for (int i = 0; i < books.length; i++) {
-            System.out.println("Recommendation #" + (i + 1) + " is " + 
-                                books[recommendationOrder[i]]);
+    /*************MAIN FUNCTIONS*********************/
+    // (these function DO appear in main) (in order of their appearance here)
+
+    public static String[] read1DString(String filename) throws FileNotFoundException {
+        // reasonably boilerplate, with help from stackoverflow
+        Scanner sc = new Scanner(new File(filename));
+        int nRows = 0;
+        while (sc.hasNextLine()) {
+            String trash = sc.nextLine();
+            nRows++;
         }
+        String[] output = new String[nRows];
+        sc.close();
+        Scanner sc2 = new Scanner(new File(filename));
+        for (int i = 0; i < nRows; i++) {
+            output[i] = sc2.nextLine();
+        }
+        sc2.close();
+        return output;
     }
 
-    public static int[] constructColumn(int[][] arr, int colNum) {
-        int[] output = new int[arr.length];
-        for (int j = 0; j < output.length; j++) {
-            output[j] = arr[j][colNum];
+    public static int[][] read2DInt(String filename) throws FileNotFoundException {
+        // reasonably boilerplate, with help from stackoverflow
+        Scanner sc = new Scanner(new File(filename));
+        int rowsCount = 1;
+        String[] firstLine = sc.nextLine().trim().split(" ");
+        while (sc.hasNextLine()) {
+            String trash = sc.nextLine();
+            rowsCount++;
         }
+        sc.close();
+        Scanner sc2 = new Scanner(new File(filename));
+        int[][] output = new int[rowsCount][firstLine.length];
+        for (int i = 0; i < output.length; i++) {
+            String[] line = sc2.nextLine().trim().split(" ");
+            for (int j = 0; j < line.length; j++) {
+                output[i][j] = Integer.parseInt(line[j]);
+            }
+        }
+        sc2.close();
         return output;
     }
 
@@ -164,25 +184,117 @@ public class Recommender {
         return similarityMatrix;
     }
 
+    public static int[] getUserRatings(String[] books) {
+        int[] output = new int[books.length];
+        Scanner s = new Scanner(System.in);
+        for (int i = 0; i < books.length; i++) {
+            System.out.println("What do you think of \"" + books[i] + "\"?");
+            output[i] = s.nextInt();
+        }
+        return output;
+    }
+
+    public static double[] getUserUserSimilarity(int[] userRatings, int[][] ratings) {
+        double[] output = new double[ratings.length];
+        for (int i = 0; i < ratings.length; i++) {
+            output[i] = computeSimilarity(userRatings, ratings[i]);
+        }
+        return output;
+    }
+
+    public static double[] makeRecommendationStrength(double[][] bookSimilarityMatrix, 
+                                                int[] userRatings) {
+        /* This function builds the array of doubles corresponding to how strongly we
+        recommend each book */
+
+        // we will build an nBooks long array
+        double[] output = new double[userRatings.length];
+        // where each cell is how much the user will like each book
+        for (int i = 0; i < userRatings.length; i++) {
+            if (userRatings[i] == -1) {
+                output[i] = userGonnaLikeItScore(userRatings, bookSimilarityMatrix[i]);
+            } else {
+                output[i] = 0; // indicating that the user has read it, not to recommend
+            }
+        }
+        return output;
+    }
+
+    public static int[] bookOrderer(double[] recommendationStrength) {
+        /* This function takes an array of doubles and returns ints corresponding the 
+        indexes from MAX to MIN of the doubles */
+        // crap, I basically have to implement most of a sorting algorithm from scratch
+        // as filtered in userGonnaLikeItScore(), 
+            // recommendationStrength[i] == 0.0 if user has not read
+
+        int outputLength = 0; 
+        for (int i = 0; i < recommendationStrength.length; i++) {
+            if (recommendationStrength[i] != 0) {
+                outputLength++;
+            }
+        }
+        int[] output = new int[outputLength];
+        int indexAdjustment = 0;
+        double[] relevantValues = copyDoubleArray(recommendationStrength); 
+        // the copy is not necessary, but I feel like it's a good practice to retain the 
+        // recommendationStrengths for the particular user, and it's not much memory
+        for (int i = 0; i < output.length; i++) {
+            int maxIndex = getDoubleMaxIndex(relevantValues);
+            output[i] = maxIndex + indexAdjustment;
+            relevantValues[maxIndex] = 0.0; 
+        }
+        return output;
+    }
+
+    public static void printRecommendations(int[] recommendations, 
+                                            String[] books) {
+        for (int i = 0; i < recommendations.length; i++) {
+            System.out.println("Recommendation #" + 
+                            (i + 1) + 
+                            ": " + 
+                            books[recommendations[i]]);
+        }
+    }
+
+    public static void printSomeRecommendations(int[] recommendations,
+                                                String[] books) {
+        for (int i = 0; i < NUM_RECOMMENDATIONS; i++) {
+            System.out.println("Recommendation #" + 
+                            (i + 1) + 
+                            ": " + 
+                            books[recommendations[i]]);
+        }
+    }
+
     public static void main(String[] args) throws FileNotFoundException{
         String[] books = read1DString(BOOKSFILE);
         int[][] ratings = read2DInt(RATINGSFILE);
-        // int[] userRatings = getUserRatings(books);
-        int[] userRatings = {5, -1, -1, 5, 4, 5, 4, -1, -1, -1, 5, 4, -1, -1, 
-                            -1, -1, -1, 5, -1};
-        double[] userUserSimilarity = getUserUserSimilarity(userRatings, ratings);
-        // 18 points Create a method that determines for each of the 30 people a score, which represents how similar that person's tastes are to the taste of the user of the program. Store these similarity scores in an array of 30 doubles. The similarity scores should be between 0 and 1 each.
-
-        // userUserSimilarity is the array of 30 doubles mentioned in this assignment requirement
-
-        // 18 points Create an array that represents recommended ratings for the user. There should be 20 numbers in this array, one for each book. The higher the number, the more strongly your program thinks the user will like the book. The number should be the average over all 30 ratings for the book that are greater than 0 (only include ratings for users who have actually rated the book). However, it should be a weighted average: people who are more similar to the current user should have a higher weight than people who are less similar.
 
         // in the below function, we will compute a nBooks x nBooks matrix of 
         // book - book similarity which we will use to generate book recommendations
+        // This array will be symmetrical across the diagonal
+        // 1.0s on the diagonal represent that a book is identical to itself
 
-        double[][] similarityMatrix = makeSimilarityMatrix(ratings);
+        double[][] bookSimilarityMatrix = makeSimilarityMatrix(ratings);
 
-        // TODO get book recommendations for the user
+        int[] userRatings = getUserRatings(books);
+        // int[] userRatings = {5, -1, -1, 4, -1, 4, -1, -1, -1, -1, 4, 2, 3, -1, -1, -1, -1, -1, 4, -1};
+        // hardcoded for testing
+
+        // 18 points Create a method that determines for each of the 30 people a score, which represents how similar that person's tastes are to the taste of the user of the program. Store these similarity scores in an array of 30 doubles. The similarity scores should be between 0 and 1 each.
+
+        // userUserSimilarity is the array of 30 doubles mentioned in this assignment requirement
+        double[] userUserSimilarity = getUserUserSimilarity(userRatings, ratings);
+
+        double[] recommendationStrength = makeRecommendationStrength(bookSimilarityMatrix, userRatings);
+
+        int[] recommendations = bookOrderer(recommendationStrength);
+
+        if (NUM_RECOMMENDATIONS == 0) {
+            printRecommendations(recommendations, books);
+        } else {
+            printSomeRecommendations(recommendations, books);
+        }
     }
 }
 
