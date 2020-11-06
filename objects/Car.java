@@ -10,6 +10,7 @@ public class Car {
         make = cMake; 
         model = cModel;
         mpg = cMpg;
+        milesDrive = 0;
         fuelCapacity = cFuelCapacity;
         fuelRemaining = cFuelRemaining;
     }
