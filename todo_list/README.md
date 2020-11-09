@@ -6,4 +6,4 @@ I will be modifying the assignment slightly to allow testing in a reasonable amo
 
 Usage:
 `javac *.java`
-`java Manager`
+`java Main`
