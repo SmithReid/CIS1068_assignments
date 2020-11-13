@@ -6,10 +6,10 @@ public class Task {
 
     /********************CONSTRUCTION**********************/
 
-    String name;
-    int priority, estSecsToComplete;
-    LocalDateTime whenDue;
-    Random rand = new Random();
+    private String name;
+    private int priority, estSecsToComplete, secsToComplete;
+    private LocalDateTime whenDue;
+    private Random rand = new Random();
 
     public Task(String cName, 
                 int cPriority, int cEstSecsToComplete, 
@@ -28,6 +28,11 @@ public class Task {
         priority = cPriority;
         estSecsToComplete = cEstSecsToComplete;
         whenDue = cWhenDue;
+
+        secsToComplete = rand.nextInt(4) - 2 + estSecsToComplete;
+        if (secsToComplete < 0) {
+            secsToComplete = 0;
+        }
     }
 
     public String toString() {
@@ -76,25 +81,18 @@ public class Task {
         return whenDue.isAfter(LocalDateTime.now());
     }
 
-    /********************RUN TASK****************************/
+    /********************TASK RUN OPS****************************/
 
-    public void runTask() {
-        // The task will complete in a random number of seconds n where
-            // 0 <= estSecsToComplete - 2 < n < estSecsToComplete + 2
-        int n = rand.nextInt(4) - 2;
-        n += estSecsToComplete;
-        if (n < 0) {
-            n = 0;
-        }
-        System.out.println(name + " begun.");
-        // Try/Catch block pretty boilerplate from here: 
-        // https://dzone.com/articles/how-to-handle-the-interruptedexception
+    public void tick() {
         try {
-            Thread.sleep(n * 1000);
+            Thread.sleep(1000);
         } catch(InterruptedException ex) {
-            Thread.currentThread().interrupt();
-            throw new RuntimeException(ex);
+            System.out.println(ex);
         }
-        System.out.println(name + " complete.");
+        secsToComplete--;
+    }
+
+    public boolean isComplete() {
+        return (secsToComplete <= 0); // == would likely work, <= is safer. 
     }
 }

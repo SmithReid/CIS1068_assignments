@@ -96,6 +96,7 @@ public class HoneyDoList {
     }
 
     public Task chooseTask(String selectionMethod) {
+        // TODO: choose tasks better, perhaps using priority as well as whenDue
         if (selectionMethod.equalsIgnoreCase("shortest")) {
             return completeTask(shortestTime());
             // this may return null

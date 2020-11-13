@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 public class Manager {
     public final String FILENAME = "input_files/test1.txt";
+    public HoneyDoList hdl = new HoneyDoList();
 
     public int countTasks(String line) {
         Scanner lineScanner = new Scanner(line).useDelimiter(";");
@@ -21,8 +22,6 @@ public class Manager {
 
         Task[] output = new Task[outputLength];
         Scanner lineScanner = new Scanner(line).useDelimiter(";");
-
-        System.out.println(line);
 
         for (int i = 0; i < outputLength; i++) {
             Scanner oneTask = new Scanner(lineScanner.next()).useDelimiter(", ");
@@ -44,27 +43,43 @@ public class Manager {
         return output;
     }
 
-    public void run() throws FileNotFoundException {
+    public void parseLineAddTasks(String line) {
+        Task[] thisTick = lineToTasks(line);
+        for (int i = 0; i < thisTick.length; i++) {
+            hdl.addTask(thisTick[i]);
+        }
+    }
+
+    public void run() {
         // TODO: implement multithreading to allow per tick updating of the HoneyDoList
             // for considering different tasks each time a task is completed. 
-        HoneyDoList hdl = new HoneyDoList();
-        Scanner mainScanner = new Scanner(new File(FILENAME));
-        mainScanner.nextLine(); // throw away the formatting header
-        while (mainScanner.hasNextLine()) {
-            String line = mainScanner.nextLine();
-            Task[] thisTick = lineToTasks(line);
-            for (int i = 0; i < thisTick.length; i++) {
-                hdl.addTask(thisTick[i]);
-            }
+        Scanner mainScanner;
+        try{
+            mainScanner = new Scanner(new File(FILENAME));
+        } catch(FileNotFoundException ex) {
+            mainScanner = new Scanner("fail");
+            System.out.println(ex);
         }
-        while (hdl.hasTasks()) {
-            TaskThread tt = new TaskThread(hdl.chooseTask("first"));
-            tt.start();
+        mainScanner.nextLine(); // throw away the formatting header
+        String line = mainScanner.nextLine();
+        parseLineAddTasks(line);
+        while (mainScanner.hasNextLine()) {
+            Task activeTask = hdl.chooseTask("first");
+            if (activeTask.isComplete()) {
+                activeTask = hdl.chooseTask("first");
+            }
+            try {
+                activeTask.tick();
+            } catch(NullPointerException ex) {
+                System.out.println("No tasks found to execute.");
+            }
             try{
-                tt.join();
+                Thread.sleep(1000);
             } catch(InterruptedException ex) {
                 System.out.println(ex);
             }
+            line = mainScanner.nextLine();
+            parseLineAddTasks(line);
         }
     }
 }
