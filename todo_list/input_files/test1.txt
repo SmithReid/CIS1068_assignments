@@ -1,4 +1,4 @@
-name,priority,estSecsToComplete,timeToComplete;another task;another task;...;
+name,priority,estSecsToComplete,whenDue = now + this field;another task;another task;...;
 take aspirin,0,1,5;
 
 mow the lawn,1,15,30;play video games,5,5,45;
@@ -9,4 +9,4 @@ mow the lawn,1,15,30;play video games,5,5,45;
 
 
 
-clean room,5,0,10;
+clean room,3,12,20;

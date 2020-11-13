@@ -64,7 +64,7 @@ public class Manager {
         parseLineAddTasks(line);
         Task activeTask = hdl.chooseTask("first");
 
-        while (mainScanner.hasNextLine() || hdl.hasTasks()) {
+        while (mainScanner.hasNextLine() || hdl.hasTasks() || activeTask != null) {
             if (activeTask != null) {
                 if (activeTask.tick()) {
                     activeTask = hdl.chooseTask("first");
@@ -75,9 +75,7 @@ public class Manager {
 
             if (mainScanner.hasNextLine()) {
                 line = mainScanner.nextLine();
-                System.out.println("Current line: " + line);
                 parseLineAddTasks(line);
-                System.out.println(hdl);
             }
         }
     }
