@@ -24,7 +24,7 @@ public class Manager {
         Scanner lineScanner = new Scanner(line).useDelimiter(";");
 
         for (int i = 0; i < outputLength; i++) {
-            Scanner oneTask = new Scanner(lineScanner.next()).useDelimiter(", ");
+            Scanner oneTask = new Scanner(lineScanner.next()).useDelimiter(",");
             
             String taskName;
             int taskPriority, taskEstSecsToComplete;
@@ -51,35 +51,34 @@ public class Manager {
     }
 
     public void run() {
-        // TODO: implement multithreading to allow per tick updating of the HoneyDoList
-            // for considering different tasks each time a task is completed. 
         Scanner mainScanner;
         try{
             mainScanner = new Scanner(new File(FILENAME));
         } catch(FileNotFoundException ex) {
-            mainScanner = new Scanner("fail");
+            mainScanner = new Scanner("FileNotFound");
             System.out.println(ex);
         }
+
         mainScanner.nextLine(); // throw away the formatting header
         String line = mainScanner.nextLine();
         parseLineAddTasks(line);
-        while (mainScanner.hasNextLine()) {
-            Task activeTask = hdl.chooseTask("first");
-            if (activeTask.isComplete()) {
+        Task activeTask = hdl.chooseTask("first");
+
+        while (mainScanner.hasNextLine() || hdl.hasTasks()) {
+            if (activeTask != null) {
+                if (activeTask.tick()) {
+                    activeTask = hdl.chooseTask("first");
+                }
+            } else {
                 activeTask = hdl.chooseTask("first");
             }
-            try {
-                activeTask.tick();
-            } catch(NullPointerException ex) {
-                System.out.println("No tasks found to execute.");
+
+            if (mainScanner.hasNextLine()) {
+                line = mainScanner.nextLine();
+                System.out.println("Current line: " + line);
+                parseLineAddTasks(line);
+                System.out.println(hdl);
             }
-            try{
-                Thread.sleep(1000);
-            } catch(InterruptedException ex) {
-                System.out.println(ex);
-            }
-            line = mainScanner.nextLine();
-            parseLineAddTasks(line);
         }
     }
 }

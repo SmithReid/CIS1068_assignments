@@ -9,9 +9,9 @@ public class HoneyDoList {
     }
 
     public String toString() {
-        String output = "";
+        String output = "HoneyDoList: ";
         for (int i = 0; i < numTasks; i++) {
-            output += tasks[i].toString();
+            output += tasks[i].toString() + " ";
         }
         return output;
     }
@@ -28,8 +28,8 @@ public class HoneyDoList {
     public void addTask(Task newTask) {
         int firstNull = tasks.length;
         boolean nullFound = false;
-        for (int i = 0; i < tasks.length; i++) {
-            if (tasks[i] == null && !nullFound) {
+        for (int i = 0; i < tasks.length && !nullFound; i++) {
+            if (tasks[i] == null) {
                 nullFound = true;
                 firstNull = i;
             }
@@ -66,8 +66,8 @@ public class HoneyDoList {
             return null;
         }
         Task output = tasks[index];
-        for (int i = 0; i < numTasks; i++) {
-            if (i <= index) {
+        for (int i = 1; i < tasks.length; i++) {
+            if (i < index) {
                 ; // do nothing
             } else {
                 tasks[i - 1] = tasks[i];
@@ -114,9 +114,5 @@ public class HoneyDoList {
             return true;
         }
         return false;
-    }
-
-    public static void main(String[] args) {
-        HoneyDoList hdl = new HoneyDoList();
     }
 }

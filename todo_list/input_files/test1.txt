@@ -1,12 +1,12 @@
-name, priority, estSecsToComplete, timeToComplete; another task; another task; ...
-take aspirin, 0, 1, 5
+name,priority,estSecsToComplete,timeToComplete;another task;another task;...;
+take aspirin,0,1,5;
 
-mow the lawn, 1, 15, 30;play video games, 5, 5, 45
-
-
+mow the lawn,1,15,30;play video games,5,5,45;
 
 
 
 
 
-clean room, 5, 0, 10
+
+
+clean room,5,0,10;

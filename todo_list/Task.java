@@ -30,13 +30,13 @@ public class Task {
         whenDue = cWhenDue;
 
         secsToComplete = rand.nextInt(4) - 2 + estSecsToComplete;
-        if (secsToComplete < 0) {
-            secsToComplete = 0;
+        if (secsToComplete < 1) {
+            secsToComplete = 1;
         }
     }
 
     public String toString() {
-        return "Task: " + name + "\n";
+        return "Task: " + name;
     }
 
     /********************GET METHODS**********************/
@@ -83,16 +83,14 @@ public class Task {
 
     /********************TASK RUN OPS****************************/
 
-    public void tick() {
+    public boolean tick() {
+        System.out.println(secsToComplete + " seconds left to complete: " + name);
         try {
             Thread.sleep(1000);
         } catch(InterruptedException ex) {
             System.out.println(ex);
         }
         secsToComplete--;
-    }
-
-    public boolean isComplete() {
-        return (secsToComplete <= 0); // == would likely work, <= is safer. 
+        return (secsToComplete <= 0);
     }
 }
