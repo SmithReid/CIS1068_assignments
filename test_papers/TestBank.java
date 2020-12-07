@@ -12,7 +12,6 @@ public class TestBank {
     private Question[] bank;
     private String IN_FILE = "input_files/test_bank1.txt"; // 3 questions long... 
                                                             // sufficient for testing
-    private String OUT_FILE = "output_files/test1.txt";
 
     public int getLines(Scanner in) {
         int output = 0;
@@ -89,6 +88,12 @@ public class TestBank {
         Question[] smallBank = shuffleAndShrinkBank();
 
         Test test = new Test(smallBank);
+        try{
+            test.toFile("output_files/test_out.txt");
+            test.answersToFile("output_files/answers_out.txt");
+        } catch(FileNotFoundException e) {
+            System.out.println("To files failed: " + e);
+        }
         System.out.println(test);
     }
 

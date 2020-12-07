@@ -30,13 +30,17 @@ public class Question {
     }
 
     public String getName() {
-        return "Question (likely non-objective question.";
+        return "Question (likely non-objective question.)";
     }
 
     public String toString() {
         return "Points: " + points + "\n" + 
                 "Difficulty: " + difficulty + "\n\n" + 
                 questionText + "\n";
+    }
+
+    public String getCorrectAnswer() {
+        return "This question may not have one correct answer.";
     }
 
     // I have decided not to implement set functions, 
