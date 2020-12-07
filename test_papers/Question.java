@@ -33,6 +33,12 @@ public class Question {
         return "Question (likely non-objective question.";
     }
 
+    public String toString() {
+        return "Points: " + points + "\n" + 
+                "Difficulty: " + difficulty + "\n\n" + 
+                questionText + "\n";
+    }
+
     // I have decided not to implement set functions, 
        // as I see little use case beyond construction
 }

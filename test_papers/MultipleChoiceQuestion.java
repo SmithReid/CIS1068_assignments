@@ -29,13 +29,14 @@ public class MultipleChoiceQuestion extends ObjectiveQuestion {
                 "---------------------" + "\n" + 
                 choices;
     }
-
+    /*
     public static void main(String[] args) {
-        HashMap<String, String> answers = new HashMap<String, String>();
+        HashMap<char, String> answers = new HashMap<String, String>();
         answers.put("A", "One leg's the same");
         answers.put("B", "lolidk");
         answers.put("C", "swiggity swoogity, this is only a test");
         MultipleChoiceQuestion mcq = new MultipleChoiceQuestion(1, 1, 1, "What's the difference between a duck?", "A", answers);
         System.out.println(mcq);
     }
+    */
 }

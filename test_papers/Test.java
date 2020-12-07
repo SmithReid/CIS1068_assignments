@@ -16,14 +16,8 @@ public class Test {
         String output = "";
         for (int i = 0; i < questions.length; i++) {
             output += "Question number: " + (i + 1) + "\n" + 
-                        questions[i].toString() + "\n\n";
+                        questions[i].toString() + "\n";
         }
         return output;
-    }
-
-    public static void main(String[] args) {
-        // ObjectiveQuestion[] generatedQuestions = readQuestions("test");
-        // Test test = new Test(generatedQuestions);
-        ;
     }
 }

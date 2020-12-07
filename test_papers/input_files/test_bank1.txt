@@ -1,3 +1,4 @@
 QuestionType,points,difficulty,answerSpace,questionText(spaces are okay),question specific args,
-MultipleChoice,1,1,1,What's the difference between a duck?,
-FillInTheBlankQuestion
+MultipleChoice,1,1,1,What's the difference between a duck?,3,A,One leg's the same,It's a chicken,An ice cream koan,
+FillInTheBlank,1,1,4,The sky is ,blue,11,
+OpenEnded,1,1,1,On a metaphysical level is reality really real?,
